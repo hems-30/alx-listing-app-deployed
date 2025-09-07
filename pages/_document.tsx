@@ -1,9 +1,12 @@
+// pages/_document.tsx
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
     <Html lang="en">
-      <Head />
+      <Head>
+        {/* You can add global meta tags, fonts, or scripts here */}
+      </Head>
       <body className="antialiased">
         <Main />
         <NextScript />

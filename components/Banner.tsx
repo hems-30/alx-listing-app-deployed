@@ -1,14 +1,15 @@
 import Image from "next/image";
 
-export default function Banner() {
-  return (
-    <div className="relative h-64 w-full">
-      <Image
-        src="/assets/banner.jpg"
-        alt="Banner"
-        fill
-        style={{ objectFit: "cover" }}
-      />
-    </div>
-  );
-}
+const Banner: React.FC = () => (
+  <div className="relative h-64 w-full">
+    <Image
+      src="/assets/images/banner.jpg" // updated path
+      alt="Banner"
+      fill
+      className="object-cover"
+      priority
+    />
+  </div>
+);
+
+export default Banner;

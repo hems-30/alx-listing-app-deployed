@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+// For simple listing (like on homepage banners)
 export interface Listing {
   id: number;
   title: string;
@@ -7,43 +8,60 @@ export interface Listing {
   image: string;
 }
 
-export interface AddressProps { //they have their own interfaces because they are objects
+// Address for properties
+export interface AddressProps {
   state: string;
   city: string;
   country: string;
 }
 
+// Offers like bed, shower, occupants
 export interface OffersProps {
   bed: string;
   shower: string;
   occupants: string;
 }
 
-
+// Full property details
 export interface PropertyProps {
-  id: number;
+  id: string;
   name: string;
+  description: string;
   address: AddressProps;
   price: number;
   image: string;
   rating: number;
   offers: OffersProps;
-  category:String [];
-  discount:string;
+  category: string[];
+  discount: string;
 }
 
-export interface LayoutProps {
-  children: ReactNode; // ReactNode is a type from React used with TypeScript. It means: “whatever valid JSX/HTML element or text can go inside this component”.
-}
-
+// Pill button
 export interface PillProps {
   label: string;
   onClick?: () => void; // optional click handler
 }
 
+// Layout wrapper
+export interface LayoutProps {
+  children: ReactNode;
+}
+
+// PropertyCard for listing cards
 export interface PropertyCardProps {
-  name: string;
-  image: string;
-  price: number;
+  property: {
+    id: string;
+    name: string;
+    image: string;
+    price: number;
+    rating: number;
+  };
+}
+
+// Review for property
+export interface Review {
+  id: string;
+  comment: string;
   rating: number;
+  author: string;
 }

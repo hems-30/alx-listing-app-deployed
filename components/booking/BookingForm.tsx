@@ -1,82 +1,73 @@
-import React from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import api from "@/lib/api";
 
-const BookingForm: React.FC = () => (
-  <div className="bg-white p-6 shadow-md rounded-lg">
-    <h2 className="text-xl font-semibold">Contact Detail</h2>
-    <form>
-      {/* Contact Information */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="firstName">First Name</label>
-          <input id="firstName" type="text" className="border p-2 w-full mt-2 rounded" />
-        </div>
-        <div>
-          <label htmlFor="lastName">Last Name</label>
-          <input id="lastName" type="text" className="border p-2 w-full mt-2 rounded" />
-        </div>
-      </div>
+interface BookingFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  cardNumber: string;
+  expirationDate: string;
+  cvv: string;
+  billingAddress: string;
+}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <div>
-          <label htmlFor="email">Email</label>
-          <input id="email" type="email" className="border p-2 w-full mt-2 rounded" />
-        </div>
-        <div>
-          <label htmlFor="phone">Phone Number</label>
-          <input id="phone" type="text" className="border p-2 w-full mt-2 rounded" />
-        </div>
-      </div>
+const BookingForm: React.FC = () => {
+  const [formData, setFormData] = useState<BookingFormData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    cardNumber: "",
+    expirationDate: "",
+    cvv: "",
+    billingAddress: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-      {/* Payment Information */}
-      <h2 className="text-xl font-semibold mt-6">Pay with</h2>
-      <div className="mt-4">
-        <label htmlFor="cardNumber">Card Number</label>
-        <input id="cardNumber" type="text" className="border p-2 w-full mt-2 rounded" />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <div>
-          <label htmlFor="exp">Expiration Date</label>
-        <input id="exp" type="text" placeholder="MM/YY" className="border p-2 w-full mt-2 rounded" />
-        </div>
-        <div>
-          <label htmlFor="cvv">CVV</label>
-          <input id="cvv" type="text" className="border p-2 w-full mt-2 rounded" />
-        </div>
-      </div>
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-      {/* Billing Address */}
-      <h2 className="text-xl font-semibold mt-6">Billing Address</h2>
-      <div className="mt-4">
-        <label htmlFor="street">Street Address</label>
-        <input id="street" type="text" className="border p-2 w-full mt-2 rounded" />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <div>
-          <label htmlFor="city">City</label>
-          <input id="city" type="text" className="border p-2 w-full mt-2 rounded" />
-        </div>
-        <div>
-          <label htmlFor="state">State</label>
-          <input id="state" type="text" className="border p-2 w-full mt-2 rounded" />
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <div>
-          <label htmlFor="zip">Zip Code</label>
-          <input id="zip" type="text" className="border p-2 w-full mt-2 rounded" />
-        </div>
-        <div>
-          <label htmlFor="country">Country</label>
-          <input id="country" type="text" className="border p-2 w-full mt-2 rounded" />
-        </div>
-      </div>
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      await api.post("/bookings", formData);
+      alert("Booking confirmed!");
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
+      else setError("Failed to submit booking.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      {/* Submit Button */}
-      <button type="button" className="mt-6 bg-green-500 text-white py-2 px-4 rounded-md w-full">
-        Confirm &amp; Pay
+  return (
+    <form onSubmit={handleSubmit} className="p-4 space-y-4 max-w-md mx-auto">
+      {Object.entries(formData).map(([key, value]) => (
+        <input
+          key={key}
+          type="text"
+          name={key}
+          value={value}
+          placeholder={key.replace(/([A-Z])/g, " $1")}
+          onChange={handleChange}
+          className="input border p-2 w-full rounded"
+        />
+      ))}
+      <button
+        type="submit"
+        disabled={loading}
+        className="btn bg-green-500 text-white px-4 py-2 rounded w-full"
+      >
+        {loading ? "Processing..." : "Confirm & Pay"}
       </button>
+      {error && <p className="text-red-500">{error}</p>}
     </form>
-  </div>
-);
+  );
+};
 
 export default BookingForm;

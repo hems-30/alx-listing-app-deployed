@@ -1,5 +1,6 @@
-import axios from "axios";
+// pages/booking/index.tsx
 import { useState } from "react";
+import api from "@/lib/api";
 
 export default function BookingForm() {
   const [formData, setFormData] = useState({
@@ -26,12 +27,24 @@ export default function BookingForm() {
     setError(null);
 
     try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings`,
-        formData
-      );
+      await api.post("/bookings", formData);
       alert("Booking confirmed!");
-    } catch (error) {
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        cardNumber: "",
+        expirationDate: "",
+        cvv: "",
+        billingAddress: "",
+      });
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(err.message);
+      } else {
+        console.error(err);
+      }
       setError("Failed to submit booking.");
     } finally {
       setLoading(false);
@@ -39,27 +52,82 @@ export default function BookingForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-4">
-      {Object.keys(formData).map((field) => (
-        <input
-          key={field}
-          type="text"
-          name={field}
-          value={(formData as any)[field]}
-          onChange={handleChange}
-          placeholder={field}
-          className="border rounded p-2 w-full"
-        />
-      ))}
-
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
+    <form onSubmit={handleSubmit} className="p-4 space-y-4 max-w-md mx-auto">
+      <input
+        type="text"
+        name="firstName"
+        placeholder="First Name"
+        value={formData.firstName}
+        onChange={handleChange}
+        className="input"
+        required
+      />
+      <input
+        type="text"
+        name="lastName"
+        placeholder="Last Name"
+        value={formData.lastName}
+        onChange={handleChange}
+        className="input"
+        required
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={handleChange}
+        className="input"
+        required
+      />
+      <input
+        type="text"
+        name="phoneNumber"
+        placeholder="Phone Number"
+        value={formData.phoneNumber}
+        onChange={handleChange}
+        className="input"
+        required
+      />
+      <input
+        type="text"
+        name="cardNumber"
+        placeholder="Card Number"
+        value={formData.cardNumber}
+        onChange={handleChange}
+        className="input"
+        required
+      />
+      <input
+        type="text"
+        name="expirationDate"
+        placeholder="Expiration Date"
+        value={formData.expirationDate}
+        onChange={handleChange}
+        className="input"
+        required
+      />
+      <input
+        type="text"
+        name="cvv"
+        placeholder="CVV"
+        value={formData.cvv}
+        onChange={handleChange}
+        className="input"
+        required
+      />
+      <input
+        type="text"
+        name="billingAddress"
+        placeholder="Billing Address"
+        value={formData.billingAddress}
+        onChange={handleChange}
+        className="input"
+        required
+      />
+      <button type="submit" disabled={loading} className="btn">
         {loading ? "Processing..." : "Confirm & Pay"}
       </button>
-
       {error && <p className="text-red-500">{error}</p>}
     </form>
   );

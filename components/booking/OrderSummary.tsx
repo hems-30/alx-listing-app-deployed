@@ -1,15 +1,16 @@
 import React from "react";
+import Image from "next/image";
 
-type BookingDetails = {
+export interface BookingDetails {
   propertyName: string;
-  price: number;       // subtotal / nightly * nights (simplified for now)
+  price: number;
   bookingFee: number;
   totalNights: number;
   startDate: string;
   imageUrl?: string;
   reviewScore?: number;
   reviewCount?: number;
-};
+}
 
 const OrderSummary: React.FC<{ bookingDetails: BookingDetails }> = ({ bookingDetails }) => {
   const total = bookingDetails.price + bookingDetails.bookingFee;
@@ -19,35 +20,38 @@ const OrderSummary: React.FC<{ bookingDetails: BookingDetails }> = ({ bookingDet
       <h2 className="text-xl font-semibold">Review Order Details</h2>
 
       <div className="flex items-center mt-4">
-        <img
-          src={bookingDetails.imageUrl || "https://placehold.co/300x300"}
-          alt="Property"
-          className="w-32 h-32 object-cover rounded-md"
-        />
-        <div className="ml-4">
+        <div className="relative w-32 h-32 flex-shrink-0">
+          <Image
+            src={bookingDetails.imageUrl || "/assets/banner.jpg"}
+            alt={bookingDetails.propertyName}
+            fill
+            className="object-cover rounded-md"
+            priority
+          />
+        </div>
+        <div className="ml-4 flex-1">
           <h3 className="text-lg font-semibold">{bookingDetails.propertyName}</h3>
           <p className="text-sm text-gray-500">
             {(bookingDetails.reviewScore ?? 4.76).toFixed(2)} ({bookingDetails.reviewCount ?? 345} reviews)
           </p>
           <p className="text-sm text-gray-500">
-            {bookingDetails.startDate} • {bookingDetails.totalNights} Nights
+            {bookingDetails.startDate} • {bookingDetails.totalNights} Night{bookingDetails.totalNights > 1 ? "s" : ""}
           </p>
         </div>
       </div>
 
-      {/* Price Breakdown */}
       <div className="mt-6 space-y-2">
         <div className="flex justify-between">
           <p>Booking Fee</p>
-          <p>${bookingDetails.bookingFee}</p>
+          <p>${bookingDetails.bookingFee.toFixed(2)}</p>
         </div>
         <div className="flex justify-between">
           <p>Subtotal</p>
-          <p>${bookingDetails.price}</p>
+          <p>${bookingDetails.price.toFixed(2)}</p>
         </div>
         <div className="flex justify-between font-semibold border-t pt-2">
           <p>Grand Total</p>
-          <p>${total}</p>
+          <p>${total.toFixed(2)}</p>
         </div>
       </div>
     </div>
