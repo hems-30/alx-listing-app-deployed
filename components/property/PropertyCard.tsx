@@ -2,7 +2,8 @@ import Image from "next/image";
 import { PropertyCardProps } from "@/interfaces";
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
-  const { name, image, price, rating } = property; // destructure from property
+  // Destructure from property
+  const { name, image, price, rating } = property;
 
   return (
     <div className="border rounded-lg overflow-hidden shadow-lg">

@@ -1,4 +1,3 @@
-// pages/index.tsx
 import { useEffect, useState } from "react";
 import Banner from "@/components/Banner";
 import Button from "@/components/Button";
@@ -11,7 +10,7 @@ import { PropertyCardProps } from "@/interfaces";
 interface PropertyAPI {
   id: number | string;
   title: string;
-  imageUrl: string;
+  imageUrl?: string;
   price: number;
   rating?: number;
 }
@@ -28,7 +27,7 @@ export default function Home() {
         const mapped = response.data.map((p) => ({
           id: p.id.toString(),
           name: p.title,
-          image: p.imageUrl || "/assets/banner.jpg",
+          image: p.imageUrl || "/assets/images/banner.jpg",
           price: p.price,
           rating: p.rating ?? 4.5,
         }));
@@ -66,18 +65,23 @@ export default function Home() {
       </div>
 
       {/* Property Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4">
         {properties.map((property) => (
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>
 
       {/* Info Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4">
         <Card title="Safe & Secure" description="Your safety is our priority." />
         <Card title="Best Deals" description="Find the best prices worldwide." />
         <Card title="24/7 Support" description="Always here to help you." />
       </div>
+
+      {/* Footer */}
+      <footer className="text-center text-gray-500 py-4">
+        © 2025 AirStay. All rights reserved.
+      </footer>
     </div>
   );
 }
