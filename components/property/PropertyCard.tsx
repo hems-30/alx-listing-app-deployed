@@ -1,18 +1,18 @@
-import { PropertyCardProps } from "@/interfaces";
 import Image from "next/image";
+import { PropertyCardProps } from "@/interfaces";
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
-  const { name, image, price, rating } = property;
+  const { name, image, price, rating } = property; // destructure from property
 
   return (
     <div className="border rounded-lg overflow-hidden shadow-lg">
       <div className="relative w-full h-48">
-        <Image src={image} alt={name} fill style={{ objectFit: "cover" }} />
+        <Image src={image} alt={name} fill className="object-cover" />
       </div>
       <div className="p-4">
-        <h2 className="text-lg font-bold">{name}</h2>
-        <p className="mt-2 text-gray-700">${price}/night</p>
-        <p className="mt-1 text-yellow-500">⭐ {rating}</p>
+        <h2 className="font-bold text-lg">{name}</h2>
+        <p className="text-gray-600">${price}</p>
+        <p className="text-yellow-500">⭐ {rating}</p>
       </div>
     </div>
   );
