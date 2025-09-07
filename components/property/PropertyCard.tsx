@@ -1,30 +1,21 @@
-import React from "react";
+import { PropertyCardProps } from "@/interfaces";
 import Image from "next/image";
 
-export interface PropertyCardProps {
-  property: {
-    id: string;
-    name: string;
-    image: string;
-    price: number;
-    rating: number;
-  };
-}
+const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
+  const { name, image, price, rating } = property;
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => (
-  <div className="bg-white border rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition transform hover:-translate-y-1">
-    <div className="relative w-full h-60">
-      <Image src={property.image} alt={property.name} fill className="object-cover" priority />
-    </div>
-    <div className="p-4 space-y-2">
-      <h3 className="text-lg font-semibold truncate">{property.name}</h3>
-      <p className="text-indigo-600 font-bold">${property.price}</p>
-      <div className="flex items-center gap-1 text-yellow-500">
-        <span>⭐</span>
-        <span className="text-sm text-gray-700">{property.rating}</span>
+  return (
+    <div className="border rounded-lg overflow-hidden shadow-lg">
+      <div className="relative w-full h-48">
+        <Image src={image} alt={name} fill style={{ objectFit: "cover" }} />
+      </div>
+      <div className="p-4">
+        <h2 className="text-lg font-bold">{name}</h2>
+        <p className="mt-2 text-gray-700">${price}/night</p>
+        <p className="mt-1 text-yellow-500">⭐ {rating}</p>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default PropertyCard;
